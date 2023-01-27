@@ -5,14 +5,11 @@ import dev.skan90.dbmovies.models.Review;
 import dev.skan90.dbmovies.service.ReviewService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 class ReviewControllerTest {
 
@@ -40,13 +37,13 @@ class ReviewControllerTest {
         movie.setPoster("https://image.tmdb.org/t/p/w500/1NqwE6LP9IEdOZ57NCT51ftHtWT.jpg");
         movie.setReviewIds(reviewList);
     }
-
-    @Test
-    void shouldCreateANewReviewInMovieReviewListAndReturnCreatedStatus() {
-
-        when(reviewServiceMock.createReview(review.toString(), movie.getImdbId()))
-                .thenReturn(review);
-
-//        reviewController.createReview();
-    }
+//
+//    @Test
+//    void shouldCreateANewReviewInMovieReviewListAndReturnCreatedStatus() {
+//
+//        when(reviewServiceMock.createReview(review.toString(), movie.getImdbId()))
+//                .thenReturn(review);
+//
+////        reviewController.createReview();
+//    }
 }
