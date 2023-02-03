@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,4 +66,35 @@ class MovieControllerTest {
         assertEquals(movie.getImdbId(), singleMovieFound.getBody().get().getImdbId());
         assertEquals(movie.getTitle(), singleMovieFound.getBody().get().getTitle());
     }
+
+    @Test
+    void shouldReturnNotFoundForEmptyList() {
+        when(movieServiceMock.findAllMovies()).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<Movie>> allMoviesGotFromDb = movieController.getMovies();
+
+        assertNotNull(allMoviesGotFromDb);
+        assertEquals(HttpStatus.NOT_FOUND, allMoviesGotFromDb.getStatusCode());
+    }
+
+    @Test
+    void shouldReturnNotFoundForEmptyOptional() {
+        when(movieServiceMock.singleMovie(str)).thenReturn(Optional.empty());
+
+        ResponseEntity<Optional<Movie>> singleMovieFound = movieController.getSingleMovie(str);
+
+        assertNotNull(singleMovieFound);
+        assertEquals(HttpStatus.NOT_FOUND, singleMovieFound.getStatusCode());
+    }
+
+    @Test
+    void shouldReturnInternalServerError() {
+        when(movieServiceMock.findAllMovies()).thenReturn(null);
+
+        ResponseEntity<List<Movie>> allMoviesGotFromDb = movieController.getMovies();
+
+        assertNotNull(allMoviesGotFromDb);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, allMoviesGotFromDb.getStatusCode());
+    }
+
 }

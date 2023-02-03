@@ -24,11 +24,22 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<List<Movie>> getMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.findAllMovies(), HttpStatus.OK);
+        List<Movie> movies = movieService.findAllMovies();
+        if (movies == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if (movies.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Movie>>(movies, HttpStatus.OK);
     }
 
     @GetMapping("/{imdbId}")
     public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable String imdbId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(imdbId), HttpStatus.OK);
+        Optional<Movie> movie = movieService.singleMovie(imdbId);
+        if (!movie.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Optional<Movie>>(movie, HttpStatus.OK);
     }
 }
